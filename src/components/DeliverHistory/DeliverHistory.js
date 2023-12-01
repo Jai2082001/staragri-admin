@@ -1,51 +1,33 @@
-import classes from './AcceptedOrder.module.css'
-import { useEffect, useState, useRef } from 'react'
-import {Spinner} from 'react-bootstrap'
-import { Table } from 'react-bootstrap'
-import AcceptSingle from './AcceptSingle/AcceptSingle'
-import Select from 'react-select'
+import {useEffect, useState, useRef} from 'react'
+import { Alert, Spinner, Table } from 'react-bootstrap'
+import { Button, Form } from "react-bootstrap";
+import classes from './DeliverHistory.module.css'
+import Select from 'react-select';
+import AcceptSingle from '../AcceptedOrder/AcceptSingle/AcceptSingle';
 
-const AcceptedOrder = () => {
+const DeliverHistory = () => {
     
     const [products, changeProducts] = useState([])
-    const [originalProducts, changeOriginalProducts] = useState([]);
-    const [outerState, changeOuterState] = useState(0);
+    const [originalProducts, changeOriginalProduts] = useState([])
+    const[outerState, changeOuterState] = useState(0);
     const [loading, changeLoading] = useState(false)
     const [filterType, changeFilterType] = useState(false);
-    const phoneRef = useRef();
+    const [filterValue, changeFilterValue] = useState(false);
+    const phoneRef = useRef()
 
     useEffect(() => {
         changeLoading(true)
-        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderReceivedAccepted`).then((response) => {
+        fetch(`${process.env.REACT_APP_FETCH_LINK}/DeliverHistory`).then((response) => {
             return response.json()
-        }).then((newArr)=>{
-            changeProducts(newArr)
-            changeOriginalProducts(newArr)
+        }).then((response)=>{
+            changeOriginalProduts(response);
+            changeProducts(response);
+            console.log(products)
             changeLoading(false)
         })    
     }, [outerState])
 
-    const acceptHandler = (order, service, id) => {
-        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderDeliverySet`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "application/json",
-                "service": service,
-                "id": id  
-            },
-            body: JSON.stringify(order)
-        }).then((response) => {
-            return response.json()
-        }).then((response) => {
-            if (response.status === 'ok') {
-                changeOuterState((prevState) => {
-                    return prevState + 1
-                })
-            }
-        })
-    }
-    
+
     const nameFilter = (event) => {
         const ogProducts = originalProducts;
         const prevProducts = products;
@@ -95,15 +77,18 @@ const AcceptedOrder = () => {
         })
         changeProducts(newProducts)
     }
+
+    console.log(products)
+
     return (
         <>
 
         {loading && <Spinner animation='border'></Spinner>}
         {!loading && 
-            <div>
+            <div className='mt-2'>
                 <div>
                     <div className={classes.selectDiv}>
-                    <button className='mb-2' onClick={resetHandler}>Reset Records</button>
+                        <button className='mb-2' onClick={resetHandler}>Reset Records</button>
                         <Select onChange={
                             (value)=>{
                                 changeProducts(originalProducts)
@@ -118,6 +103,7 @@ const AcceptedOrder = () => {
                         {filterType === 'Date' && <>Date to Find<input onChange={dateHandler} type='date' className={'mt-3'}></input></>}
                         {filterType === 'Phone' && <><input placeholder='Phone Number' ref={phoneRef} className={'mt-3'} type={'text'} ></input><button onClick={phoneFilter}>See Number</button></>}
                     </div>
+
                     <Table>
                         <thead>
                             <tr>
@@ -128,16 +114,17 @@ const AcceptedOrder = () => {
                                 <th>Courier Id</th>
                                 <th>Address</th>
                                 <th>Cart</th>
-                                <th></th>
+                                <th>Delivery Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                        {products.map((itemSingle) => {               
-                            return (
-                                <AcceptSingle status={'Put In Transit'} itemSingle={itemSingle} acceptHandler={acceptHandler}></AcceptSingle>
-                            )
-                        })}      
-                        {products.length === 0 && "No Order Accepted"}              
+                                {products.map((itemSingle) => {               
+                                    return (
+                                        <AcceptSingle status={'History'} itemSingle={itemSingle}></AcceptSingle>
+                                    )
+                                })}
+                              
+                        {products.length === 0 && "No Order Received"}              
                         </tbody>
                     </Table>
                 </div>
@@ -148,4 +135,4 @@ const AcceptedOrder = () => {
     )
 }
 
-export default AcceptedOrder
+export default DeliverHistory

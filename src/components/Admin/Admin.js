@@ -24,63 +24,74 @@ import Remove from '../Remove/Remove';
 import ProductStructure from '../ProductStructure/ProductStructure';
 import AcceptedOrder from '../AcceptedOrder/AcceptedOrder';
 import DeliveryFunc from '../DeliveryFunc/DeliveryFunc'
+import InTransit from '../InTrasit/InTransit'
+import DeliverHistory from '../DeliverHistory/DeliverHistory';
+import ImageEdit from '../ImageEdit/ImageEdit'
+import ImageSecEdit from '../ImageSecEdit/ImageSecEdit';
+import CurrentStock from '../CurrentStock/CurrentStock';
+
 
 const Admin = ({ secured, changeSecured }) => {
-    const [currentFunc, changeCurrentFunc] = useState('chart');
+    const [currentFunc, changeCurrentFunc] = useState('orderReceived');
     const [cookies, setCookies, removeCookies] = useCookies(['authenticated'])
     const logoutHandler = () => {
         console.log('clicked')
         removeCookies('authenticated');
         changeSecured(false)
     }
-    if(!secured){
+    if (!secured) {
         return <Redirect to='/login'></Redirect>
     } else {
         return (
-    <div>
-    <Navbar className={classes.navBarDiv} >
-        <Container className={classes.textColor}>
-        <Navbar.Brand href="#home">
-            Star Seeds  Admin
-        </Navbar.Brand>
-        <Navbar.Brand className={'justify-content-end'}>
-            <span onClick={logoutHandler} className={classes.logoutSpan}>LogOut</span>
-        </Navbar.Brand>
-        </Container>
-    </Navbar>
-    <div>
-        <Row>
-            <Col xs={ 3 } className={ classes.sidebar }>
-                <Sidebar changeCurrentFunc = { changeCurrentFunc } currentFunc={currentFunc}></Sidebar>
-            </Col>
-                <Col xs={9} className={classes.adminDiv}>
-                            
-                {currentFunc === 'chart' && <Statics></Statics>}        
-                { currentFunc === 'addAccess' && <AddAccess></AddAccess> }
-                { currentFunc === 'addProduct' && <AddProduct></AddProduct>}
-                { currentFunc === 'couponEdit' && <EditCoupons></EditCoupons> }
-                { currentFunc === 'categoryEdit' &&  <EditCategories></EditCategories>}
-                { currentFunc === 'brandNameEdit' && <BrandNameEdit></BrandNameEdit>}
-                { currentFunc === 'accessCategoryEdit'&&<EditAccess></EditAccess>}      
-                { currentFunc === 'editProduct' && <EditProduct></EditProduct>}
-                { currentFunc === 'editAccess' && <EditAccess></EditAccess>}
-                { currentFunc === 'userOrderTracker' && <UserOrderTracker></UserOrderTracker>}
-                { currentFunc === 'orderReceived' && <OrderReceived></OrderReceived>}
-                { currentFunc === 'orderStatusUpdate' && <OrderStatusUpdate></OrderStatusUpdate>}        
-                { currentFunc === 'subAdmin' && <SubAdmin></SubAdmin>}
-                { currentFunc === 'delivery' && <DeliveryAvail></DeliveryAvail>}
-                { currentFunc ==='bulkUpload' && <BulkUpload></BulkUpload>}
-                {currentFunc === 'productType' && <AddProductType></AddProductType>}
-                {currentFunc === 'imgCustom' && <ImageCustomizer></ImageCustomizer>}
-                {currentFunc === 'removeProduct' && <Remove></Remove>}
-                {currentFunc === 'productStru' && <ProductStructure></ProductStructure>}
-                {currentFunc === 'accepted' && <AcceptedOrder></AcceptedOrder>}
-                {currentFunc === 'deliverFunc' && <DeliveryFunc></DeliveryFunc>}
-            </Col>
-        </Row>
-    </div>        
-    </div>
-    )   
+            <div>
+                <Navbar className={classes.navBarDiv} >
+                    <Container className={classes.textColor}>
+                        <Navbar.Brand href="#home">
+                            Star Agriseeds Admin
+                        </Navbar.Brand>
+                        <Navbar.Brand className={'justify-content-end'}>
+                            <span onClick={logoutHandler} className={classes.logoutSpan}>LogOut</span>
+                        </Navbar.Brand>
+                    </Container>
+                </Navbar>
+                <div>
+                    <Row>
+                        <Col xs={3} className={classes.sidebar}>
+                            <Sidebar changeCurrentFunc={changeCurrentFunc} currentFunc={currentFunc}></Sidebar>
+                        </Col>
+                        <Col xs={9} className={classes.adminDiv}>
+
+                            {currentFunc === 'chart' && <Statics></Statics>}
+                            {currentFunc === 'addAccess' && <AddAccess></AddAccess>}
+                            {currentFunc === 'addProduct' && <AddProduct></AddProduct>}
+                            {currentFunc === 'couponEdit' && <EditCoupons></EditCoupons>}
+                            {currentFunc === 'categoryEdit' && <EditCategories></EditCategories>}
+                            {currentFunc === 'brandNameEdit' && <BrandNameEdit></BrandNameEdit>}
+                            {currentFunc === 'accessCategoryEdit' && <EditAccess></EditAccess>}
+                            {currentFunc === 'editProduct' && <EditProduct></EditProduct>}
+                            {currentFunc === 'editAccess' && <EditAccess></EditAccess>}
+                            {currentFunc === 'userOrderTracker' && <UserOrderTracker></UserOrderTracker>}
+                            {currentFunc === 'orderReceived' && <OrderReceived></OrderReceived>}
+                            {currentFunc === 'orderStatusUpdate' && <OrderStatusUpdate></OrderStatusUpdate>}
+                            {currentFunc === 'subAdmin' && <SubAdmin></SubAdmin>}
+                            {currentFunc === 'delivery' && <DeliveryAvail></DeliveryAvail>}
+                            {currentFunc === 'bulkUpload' && <BulkUpload></BulkUpload>}
+                            {currentFunc === 'productType' && <AddProductType></AddProductType>}
+                            {currentFunc === 'imgCustom' && <ImageCustomizer></ImageCustomizer>}
+                            {currentFunc === 'removeProduct' && <Remove></Remove>}
+                            {currentFunc === 'productStru' && <ProductStructure></ProductStructure>}
+                            {currentFunc === 'accepted' && <AcceptedOrder></AcceptedOrder>}
+                            {currentFunc === 'deliverFunc' && <DeliveryFunc></DeliveryFunc>}
+                            {currentFunc === 'transit' && <InTransit></InTransit>}
+                            {currentFunc === 'history' && <DeliverHistory></DeliverHistory>}
+                            {currentFunc === 'imagePrEdit' && <ImageEdit></ImageEdit>}
+                            {currentFunc === 'imageSecEdit' && <ImageSecEdit></ImageSecEdit>}
+                            {currentFunc === 'currentStock' && <CurrentStock></CurrentStock>}
+                        </Col>
+                    </Row>
+                </div>
+            </div>
+        )
     }
 }
 

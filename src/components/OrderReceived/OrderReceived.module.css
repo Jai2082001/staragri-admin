@@ -10,7 +10,9 @@
 .parentDiv{
     border-bottom: 1px solid lightgray;
 }
-
+.selectDiv{
+    max-width: 500px;
+}
 .infoDiv tr{
     border: none;
 }

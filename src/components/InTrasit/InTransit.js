@@ -1,22 +1,23 @@
-import classes from './AcceptedOrder.module.css'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {Spinner} from 'react-bootstrap'
 import { Table } from 'react-bootstrap'
-import AcceptSingle from './AcceptSingle/AcceptSingle'
+import classes from './InTransit.module.css'
 import Select from 'react-select'
+import AcceptSingle from '../AcceptedOrder/AcceptSingle/AcceptSingle'
 
 const AcceptedOrder = () => {
     
     const [products, changeProducts] = useState([])
-    const [originalProducts, changeOriginalProducts] = useState([]);
+    const [originalProducts, changeOriginalProducts] = useState([])
     const [outerState, changeOuterState] = useState(0);
     const [loading, changeLoading] = useState(false)
     const [filterType, changeFilterType] = useState(false);
-    const phoneRef = useRef();
+
+    const phoneRef = useRef()
 
     useEffect(() => {
         changeLoading(true)
-        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderReceivedAccepted`).then((response) => {
+        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderInTransit`).then((response) => {
             return response.json()
         }).then((newArr)=>{
             changeProducts(newArr)
@@ -25,27 +26,7 @@ const AcceptedOrder = () => {
         })    
     }, [outerState])
 
-    const acceptHandler = (order, service, id) => {
-        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderDeliverySet`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "application/json",
-                "service": service,
-                "id": id  
-            },
-            body: JSON.stringify(order)
-        }).then((response) => {
-            return response.json()
-        }).then((response) => {
-            if (response.status === 'ok') {
-                changeOuterState((prevState) => {
-                    return prevState + 1
-                })
-            }
-        })
-    }
-    
+
     const nameFilter = (event) => {
         const ogProducts = originalProducts;
         const prevProducts = products;
@@ -95,15 +76,35 @@ const AcceptedOrder = () => {
         })
         changeProducts(newProducts)
     }
+
+
+    const acceptHandler = (order) => {
+        fetch(`${process.env.REACT_APP_FETCH_LINK}/orderDelivered`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json",   
+            },
+            body: JSON.stringify(order)
+        }).then((response) => {
+            return response.json()
+        }).then((response) => {
+            if (response.status === 'ok') {
+                changeOuterState((prevState) => {
+                    return prevState + 1
+                })
+            }
+        })
+    }
     return (
         <>
 
         {loading && <Spinner animation='border'></Spinner>}
         {!loading && 
             <div>
-                <div>
+                <div className='mt-2'>
                     <div className={classes.selectDiv}>
-                    <button className='mb-2' onClick={resetHandler}>Reset Records</button>
+                        <button className='mb-2' onClick={resetHandler}>Reset Records</button>
                         <Select onChange={
                             (value)=>{
                                 changeProducts(originalProducts)
@@ -122,19 +123,17 @@ const AcceptedOrder = () => {
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Number</th>
-                                <th>Date Issued</th>
-                                <th>Courier Service</th>
-                                <th>Courier Id</th>
                                 <th>Address</th>
                                 <th>Cart</th>
+                                <th>Courier Service</th>
+                                <th>Courier Id</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                         {products.map((itemSingle) => {               
                             return (
-                                <AcceptSingle status={'Put In Transit'} itemSingle={itemSingle} acceptHandler={acceptHandler}></AcceptSingle>
+                                <AcceptSingle status={'Delivered'} itemSingle={itemSingle} acceptHandler={acceptHandler}></AcceptSingle>
                             )
                         })}      
                         {products.length === 0 && "No Order Accepted"}              

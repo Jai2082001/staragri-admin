@@ -16,9 +16,19 @@ const OrderReceivedParent = ({ itemSingle, acceptHandler, rejectHandler }) => {
         <>
             <tr className={classes.infoDiv}>
                 <td>{itemSingle.name}</td>
+                <td>{itemSingle.number}</td>
+                <td>{itemSingle.date}</td>
                 <td>{<AddressElement address={itemSingle.address}></AddressElement>}</td>
                 <td><CartElement cart={itemSingle.cart}></CartElement></td>
-                <td><div><Button onClick={() => { acceptHandler(itemSingle, lengthRef.current.value, widthRef.current.value, weightRef.current.value, heightRef.current.value) }}>Accept</Button><Button className={'ms-2 mt-2'} onClick={() => { rejectHandler(itemSingle) }}>Reject</Button></div></td>
+                <td><div>{itemSingle._id}</div></td>
+                <td><div>{itemSingle.paymentid}</div></td>
+                <td>
+                    <>
+                    {itemSingle.paymentid && <div><Button onClick={() => { acceptHandler(itemSingle, lengthRef.current.value, widthRef.current.value, weightRef.current.value, heightRef.current.value) }}>Accept</Button><Button className={'ms-2 mt-2'} onClick={() => { rejectHandler(itemSingle) }}>Reject</Button></div>}
+                    {itemSingle.paymentid && <></>}
+                    
+                    </>
+                </td>
             </tr>
             <tr className={classes.packDiv}>
                 <td>
